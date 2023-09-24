@@ -1,1 +1,2 @@
-let variable_name = 3.1415;
+let x = 3.14;
+let variable_name = "long string";

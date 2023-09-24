@@ -6,7 +6,7 @@
 int
 main(int argc, char** argv)
 {
-        FILE* file = fopen("monkey_examples/simple.mk", "r");
+        FILE* file = fopen("monkey_examples/monkey_test.mk", "r");
         Lexer lexer = lexer_new(file);
 
         Token token;

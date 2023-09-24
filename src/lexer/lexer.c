@@ -74,13 +74,10 @@ lexer_read_character(Lexer* lexer)
 char
 lexer_peek_character(Lexer* lexer)
 {
-        return fgetc(lexer->file);
-}
-
-/* Read string between two double quotes */
-void
-lexer_read_string(Lexer* lexer)
-{
+        char c = fgetc(lexer->file);
+        if (c != EOF)
+                fseek(lexer->file, -1, SEEK_CUR);
+        return c;
 }
 
 /* Init new Lexer */
@@ -165,8 +162,18 @@ lexer_get_token(Lexer* lexer)
                         token = token_new(Colon, ":");
                         break;
                 case '"':
-                        token = token_new(String, "string");
-                        break;
+                        lexer_read_character(lexer);
+                        HeapString str = string_new(&lexer->character);
+                        while (lexer_peek_character(lexer) != '"') {
+                                lexer_read_character(lexer);
+                                string_append(&str, &lexer->character);
+                        }
+                        lexer_read_character(lexer);
+                        lexer_read_character(lexer);
+                        token.type = String;
+                        token.literal = str;
+
+                        return token;
                 case '(':
                         token = token_new(LParen, "(");
                         break;
@@ -200,7 +207,7 @@ lexer_get_token(Lexer* lexer)
                                 if (is_keyword(word.pointer))
                                         token.type = Keyword;
                                 else
-                                        token.type = String;
+                                        token.type = Identifier;
                                 token.literal = word;
                         } else if (is_numeric(lexer->character)) {
                                 HeapString number = string_new("");

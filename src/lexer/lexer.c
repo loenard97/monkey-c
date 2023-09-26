@@ -1,15 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "token.h"
 #include "lexer.h"
+#include "token.h"
 
 int
 is_space(char input)
 {
         switch (input) {
                 case ' ':
-                        return 1;
                 case '\n':
                         return 1;
                 default:
@@ -20,12 +19,8 @@ is_space(char input)
 int
 is_alpha(char input)
 {
-        if (
-                input >= 'A' && input <= 'Z' 
-                || input >= 'a' && input <= 'z' 
-                || input == '_'
-                || input == '-'
-        ) {
+        if (input >= 'A' && input <= 'Z' || input >= 'a' && input <= 'z' ||
+            input == '_' || input == '-') {
                 return 1;
         }
         return 0;
@@ -75,8 +70,9 @@ char
 lexer_peek_character(Lexer* lexer)
 {
         char c = fgetc(lexer->file);
-        if (c != EOF)
+        if (c != EOF) {
                 fseek(lexer->file, -1, SEEK_CUR);
+        }
         return c;
 }
 
@@ -204,15 +200,17 @@ lexer_get_token(Lexer* lexer)
                                         string_append(&word, &lexer->character);
                                         lexer_read_character(lexer);
                                 }
-                                if (is_keyword(word.pointer))
+                                if (is_keyword(word.pointer)) {
                                         token.type = Keyword;
-                                else
+                                } else {
                                         token.type = Identifier;
+                                }
                                 token.literal = word;
                         } else if (is_numeric(lexer->character)) {
                                 HeapString number = string_new("");
                                 while (is_numeric(lexer->character)) {
-                                        string_append(&number, &lexer->character);
+                                        string_append(
+                                            &number, &lexer->character);
                                         lexer_read_character(lexer);
                                 }
                                 token.type = Number;

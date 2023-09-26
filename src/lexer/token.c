@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#include "token.h"
 #include "../lib/string.h"
+#include "token.h"
 
 Token
 token_new(TokenType type, const char* literal)
@@ -9,7 +9,7 @@ token_new(TokenType type, const char* literal)
         Token token;
         token.type = type;
         token.literal = string_new(literal);
-        
+
         return token;
 }
 
@@ -22,37 +22,21 @@ token_free(Token* token)
 void
 token_print(Token* token)
 {
-        const char *token_names[] = {
-                "Identifier", 
-                "Number", 
-                "String", 
-                "Keyword", 
-                "Eof", 
-                "Illegal", 
+        const char* token_names[] = {
+                "Identifier", "Number",       "String", "Keyword",
+                "Eof",        "Illegal",
 
-                "Assign", 
-                "Plus", 
-                "Minus", 
-                "Bang", 
-                "Asterisk", 
-                "Slash", 
-                "Lesser", 
-                "LesserEqual", 
-                "Greater", 
-                "GreaterEqual", 
-                "Equal", 
-                "NotEqual", 
+                "Assign",     "Plus",         "Minus",  "Bang",
+                "Asterisk",   "Slash",        "Lesser", "LesserEqual",
+                "Greater",    "GreaterEqual", "Equal",  "NotEqual",
 
-                "Comma", 
-                "Semicolon", 
-                "Colon", 
-                "LParen", 
-                "RParen", 
-                "LBrace", 
-                "RBrace", 
-                "LBracket", 
-                "RBracket", 
+                "Comma",      "Semicolon",    "Colon",  "LParen",
+                "RParen",     "LBrace",       "RBrace", "LBracket",
+                "RBracket",
         };
 
-        printf("Token <%s, '%s'>\n", token_names[token->type], token->literal.pointer);
+        printf(
+            "Token <%s, '%s'>\n",
+            token_names[token->type],
+            token->literal.pointer);
 }

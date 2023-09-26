@@ -17,8 +17,7 @@ run: all
 
 fmt:
 	clang-format -i main.c
-	clang-format -i src/lexer/lexer.c
-	clang-format -i src/lexer/token.c
+	clang-format -i $(OBJS)
 
 clean:
 	rm -f main test

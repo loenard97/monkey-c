@@ -39,10 +39,10 @@ typedef enum token_type
 typedef struct token
 {
         TokenType type;
-        HeapString literal;
+        HeapString * literal;
 } Token;
 
-Token token_new(TokenType type, const char* literal);
+Token * token_new(TokenType type, const char* literal);
 void token_free(Token* token);
 void token_print(Token* token);
 

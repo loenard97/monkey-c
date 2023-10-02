@@ -24,7 +24,7 @@ typedef struct parser {
 
 Precedence precedence_from_token(Token* token);
 
-Parser parser_new(Lexer* lexer);
+Parser * parser_new(Lexer* lexer);
 void parser_next_token(Parser* parser);
 int parser_expect_peek(Parser* parser, TokenType token_type);
 

@@ -85,16 +85,16 @@ infix_parse_fn(Parser* parser, Token* token)
         }
 }
 
-Parser
+Parser *
 parser_new(Lexer* lexer)
 {
-        Parser parser;
-        parser.lexer = lexer;
+        Parser * parser = malloc(sizeof *parser);
+        parser->lexer = lexer;
 
-        Token first_token = lexer_get_token(lexer);
-        Token second_token = lexer_get_token(lexer);
-        parser.current_token = &first_token;
-        parser.peek_token = &second_token;
+        Token * first_token = lexer_get_token(lexer);
+        Token * second_token = lexer_get_token(lexer);
+        parser->current_token = first_token;
+        parser->peek_token = second_token;
 
         return parser;
 }
@@ -103,28 +103,9 @@ void
 parser_next_token(Parser* parser)
 {
         printf("parser next token... ");
-
-        if (NULL != parser->peek_token)
-                *parser->current_token = *parser->peek_token;
-        Token next_token = lexer_get_token(parser->lexer);
-        parser->peek_token = &next_token;
-
-        printf("next_token = ");
-        token_print(&next_token);
-        printf("\n");
-
-        printf("new state:\n");
-        printf("cur tok %p\n", parser->current_token);
-        if (NULL != parser->current_token) {
-                printf("\tparser->current_token = ");
-                token_print(parser->current_token);
-                printf("\n");
-        }
-        printf("\tparser->peek_token = ");
-        token_print(parser->peek_token);
-        printf("\n");
-
-        printf("parser next token done\n\n");
+        token_free(parser->current_token);
+        parser->current_token = parser->peek_token;
+        parser->peek_token = lexer_get_token(parser->lexer);
 }
 
 

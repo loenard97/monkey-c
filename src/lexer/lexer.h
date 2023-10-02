@@ -20,8 +20,8 @@ int is_numeric(char input);
 void lexer_read_character(Lexer* lexer);
 char lexer_peek_character(Lexer* lexer);
 void lexer_read_string(Lexer* lexer);
-Lexer lexer_new(FILE* file);
+Lexer * lexer_new(FILE* file);
 void lexer_print(Lexer* lexer);
-Token lexer_get_token(Lexer* lexer);
+Token * lexer_get_token(Lexer* lexer);
 
 #endif

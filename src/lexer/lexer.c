@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "lexer.h"
@@ -76,22 +77,19 @@ lexer_peek_character(Lexer* lexer)
         return c;
 }
 
-/* Init new Lexer */
-Lexer
+Lexer *
 lexer_new(FILE* file)
 {
-        Lexer lexer;
-        lexer.file = file;
-        lexer.position = 0;
-        lexer.read_position = 0;
-        lexer.character = '\0';
-
-        lexer_read_character(&lexer);
+        Lexer * lexer = malloc(sizeof(*lexer));
+        lexer->file = file;
+        lexer->position = 0;
+        lexer->read_position = 0;
+        lexer->character = '\0';
+        lexer_read_character(lexer);
 
         return lexer;
 }
 
-/* Print Lexer */
 void
 lexer_print(Lexer* lexer)
 {
@@ -102,11 +100,10 @@ lexer_print(Lexer* lexer)
             lexer->character);
 }
 
-/* Return next token */
-Token
+Token *
 lexer_get_token(Lexer* lexer)
 {
-        Token token;
+        Token * token = (Token*) NULL;
 
         while (is_space(lexer->character)) {
                 lexer_read_character(lexer);
@@ -159,15 +156,15 @@ lexer_get_token(Lexer* lexer)
                         break;
                 case '"':
                         lexer_read_character(lexer);
-                        HeapString str = string_new(&lexer->character);
+                        HeapString * str = string_new(&lexer->character);
                         while (lexer_peek_character(lexer) != '"') {
                                 lexer_read_character(lexer);
-                                string_append(&str, &lexer->character);
+                                string_append(str, &lexer->character);
                         }
                         lexer_read_character(lexer);
                         lexer_read_character(lexer);
-                        token.type = String;
-                        token.literal = str;
+                        token->type = String;
+                        token->literal = str;
 
                         return token;
                 case '(':
@@ -195,26 +192,26 @@ lexer_get_token(Lexer* lexer)
 
                 default:
                         if (is_alpha(lexer->character)) {
-                                HeapString word = string_new("");
+                                HeapString * word = string_new("");
                                 while (is_alpha(lexer->character)) {
-                                        string_append(&word, &lexer->character);
+                                        string_append(word, &lexer->character);
                                         lexer_read_character(lexer);
                                 }
-                                if (is_keyword(word.pointer)) {
-                                        token.type = Keyword;
+                                if (is_keyword(word->pointer)) {
+                                        token->type = Keyword;
                                 } else {
-                                        token.type = Identifier;
+                                        token->type = Identifier;
                                 }
-                                token.literal = word;
+                                token->literal = word;
                         } else if (is_numeric(lexer->character)) {
-                                HeapString number = string_new("");
+                                HeapString * number = string_new("");
                                 while (is_numeric(lexer->character)) {
                                         string_append(
-                                            &number, &lexer->character);
+                                            number, &lexer->character);
                                         lexer_read_character(lexer);
                                 }
-                                token.type = Number;
-                                token.literal = number;
+                                token->type = Number;
+                                token->literal = number;
                         }
                         return token;
         }

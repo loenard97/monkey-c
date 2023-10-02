@@ -1,14 +1,15 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "../lib/string.h"
 #include "token.h"
 
-Token
+Token *
 token_new(TokenType type, const char* literal)
 {
-        Token token;
-        token.type = type;
-        token.literal = string_new(literal);
+        Token * token = malloc(sizeof(*token));
+        token->type = type;
+        token->literal = string_new(literal);
 
         return token;
 }
@@ -16,7 +17,8 @@ token_new(TokenType type, const char* literal)
 void
 token_free(Token* token)
 {
-        string_free(&token->literal);
+        string_free(token->literal);
+        free(token);
 }
 
 void
@@ -38,5 +40,5 @@ token_print(Token* token)
         printf(
             "Token <%s, '%s'>",
             token_names[token->type],
-            token->literal.pointer);
+            token->literal->pointer);
 }

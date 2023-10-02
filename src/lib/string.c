@@ -5,14 +5,12 @@
 
 #include "string.h"
 
-HeapString
+HeapString *
 string_new(const char* text)
 {
-        HeapString str;
-        str.pointer = (char*)malloc(4 * sizeof(char));
-        str.allocated_length = 4;
-
-        string_append(&str, text);
+        HeapString * str = malloc(sizeof *str);
+        str->pointer = malloc(4 * sizeof(char));
+        str->allocated_length = 4;
 
         return str;
 }
@@ -21,6 +19,7 @@ void
 string_free(HeapString* string)
 {
         free(string->pointer);
+        free(string);
 }
 
 unsigned long

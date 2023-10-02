@@ -18,5 +18,6 @@ List* list_new();
 void list_push(List* list, void* data);
 void* list_pop(List* list);
 void list_free(List* list);
+void list_print(List* list);
 
 #endif

@@ -2,22 +2,17 @@
 #include <string.h>
 
 #include "src/lexer/lexer.h"
+#include "src/parser/ast.h"
+#include "src/parser/parser.h"
 
 int
 main(int argc, char** argv)
 {
-        FILE* file = fopen("monkey_examples/monkey_test.mk", "r");
+        FILE* file = fopen("test.mk", "r");
         Lexer lexer = lexer_new(file);
+        Parser parser = parser_new(&lexer);
 
-        Token token;
-        while (1) {
-                token = lexer_get_token(&lexer);
-                if (token.type == Eof) {
-                        break;
-                }
-                token_print(&token);
-                // token_free(&token);
-        }
+        ASTProgram program = parse_program(&parser);
 
         fclose(file);
 

@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "list.h"
 
 List*
@@ -43,4 +45,9 @@ list_free(List* list)
                 current_node = next_node;
         }
         free(list);
+}
+
+void list_print(List* list)
+{
+        printf("List <>");
 }

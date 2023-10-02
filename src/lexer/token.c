@@ -36,7 +36,7 @@ token_print(Token* token)
         };
 
         printf(
-            "Token <%s, '%s'>\n",
+            "Token <%s, '%s'>",
             token_names[token->type],
             token->literal.pointer);
 }

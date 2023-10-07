@@ -103,7 +103,9 @@ lexer_print(Lexer* lexer)
 Token *
 lexer_get_token(Lexer* lexer)
 {
-        Token * token = (Token*) NULL;
+        printf("lexer_get_token\n");
+
+        Token* token = malloc(sizeof *token);
 
         while (is_space(lexer->character)) {
                 lexer_read_character(lexer);
@@ -114,12 +116,15 @@ lexer_get_token(Lexer* lexer)
                         if (lexer_peek_character(lexer) == '=') {
                                 lexer_read_character(lexer);
                                 token = token_new(Equal, "==");
+                                token->literal = string_new("test");
                         } else {
-                                token = token_new(Assign, "=");
+                                token->type = Assign;
+                                token->literal = string_new("=");
                         }
                         break;
                 case '+':
-                        token = token_new(Plus, "+");
+                        token->type = Plus;
+                        token->literal = string_new("+");
                         break;
                 case '-':
                         token = token_new(Minus, "-");
@@ -192,17 +197,21 @@ lexer_get_token(Lexer* lexer)
 
                 default:
                         if (is_alpha(lexer->character)) {
+                                printf("is_alpha\n");
                                 HeapString * word = string_new("");
                                 while (is_alpha(lexer->character)) {
                                         string_append(word, &lexer->character);
                                         lexer_read_character(lexer);
                                 }
+                                printf("after while\n");
                                 if (is_keyword(word->pointer)) {
                                         token->type = Keyword;
                                 } else {
                                         token->type = Identifier;
                                 }
+                                printf("1");
                                 token->literal = word;
+                                token_print(token);
                         } else if (is_numeric(lexer->character)) {
                                 HeapString * number = string_new("");
                                 while (is_numeric(lexer->character)) {

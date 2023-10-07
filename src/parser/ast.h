@@ -6,26 +6,43 @@
 #include "../lib/list.h"
 
 typedef enum {
-        LetStatement,
-        ReturnStatement,
-        ExpressionStatement,
-        BlockStatement,
-} ASTStatementType;
+        ProgramType,
+        StatementType,
+        ExpressionType,
 
-typedef enum {
-        IdentifierExpression,
-        BooleanExpression,
-        IntegerExpression,
-        StringExpression,
-        ArrayExpression,
-        PrefixExpression,
-        InfixExpression,
-        IfExpression,
-        FunctionExpression,
-        CallExpression,
-        IndexExpression,
-        HashMapExpression,
-} ASTExpressionType;
+        LetStatementType,
+        ReturnStatementType,
+        ExpressionStatementType,
+        BlockStatementType,
+
+        IdentifierExpressionType,
+        BooleanExpressionType,
+        IntegerExpressionType,
+        StringExpressionType,
+        ArrayExpressionType,
+        PrefixExpressionType,
+        InfixExpressionType,
+        IfExpressionType,
+        FunctionExpressionType,
+        CallExpressionType,
+        IndexExpressionType,
+        HashMapExpressionType,
+} ASTNodeType;
+
+typedef struct {
+        ASTNodeType type;
+        void* node;
+} ASTNode;
+
+typedef struct {
+        ASTNodeType type;
+        void* statement;
+} ASTStatement;
+
+typedef struct {
+        ASTNodeType type;
+        void* expression;
+} ASTExpression;
 
 typedef struct {
         List* statements;
@@ -34,97 +51,87 @@ typedef struct {
 void print_ast_program(ASTProgram* program);
 
 typedef struct {
-        ASTStatementType type;
-        void* value;
-} ASTStatement;
-
-typedef struct {
-        ASTExpressionType type;
-        void* value;
-} ASTExpression;
-
-typedef struct {
-        ASTExpressionType type;
-        HeapString value;
+        ASTNodeType type;
+        HeapString* value;
 } ASTIdentifier;
 
 void print_ast_identifier(ASTIdentifier* identifier);
 
 typedef struct {
-        ASTStatementType type;
-        ASTIdentifier* name;
-        ASTExpression* value;
+        ASTNodeType type;
+        ASTIdentifier* identifier;
+        ASTNode* expression;
 } ASTLetStatement;
 
 typedef struct {
-        ASTStatementType type;
-        ASTExpression* value;
+        ASTNodeType type;
+        ASTNode* expression;
 } ASTReturnStatement;
 
 typedef struct {
-        ASTStatementType type;
-        ASTExpression* expression;
+        ASTNodeType type;
+        ASTNode* expression;
 } ASTExpressionStatement;
 
 typedef struct {
-        ASTStatementType type;
+        ASTNodeType type;
         List* statements;
 } ASTBlockStatement;
 
 typedef struct {
-        ASTExpressionType type;
+        ASTNodeType type;
         int value;
 } ASTBooleanExpression;
 
 typedef struct {
-        ASTExpressionType type;
+        ASTNodeType type;
         int value;
 } ASTIntegerExpression;
 
 typedef struct {
-        ASTExpressionType type;
-        HeapString value;
+        ASTNodeType type;
+        HeapString* value;
 } ASTStringExpression;
 
 typedef struct {
-        ASTExpressionType type;
+        ASTNodeType type;
         List* value;
 } ASTArrayExpression;
 
 typedef struct {
-        ASTExpressionType type;
-        HeapString prefix;
+        ASTNodeType type;
+        HeapString* prefix;
         ASTExpression* right;
 } ASTPrefixExpression;
 
 typedef struct {
-        ASTExpressionType type;
-        HeapString infix;
+        ASTNodeType type;
+        HeapString* infix;
         ASTExpression* left;
         ASTExpression* right;
 } ASTInfixExpression;
 
 typedef struct {
-        ASTExpressionType type;
+        ASTNodeType type;
         ASTExpression* condition;
         ASTBlockStatement* consequence;
         ASTBlockStatement* alternative;
 } ASTIfExpression;
 
 typedef struct {
-        ASTExpressionType type;
+        ASTNodeType type;
         List* parameters;
         ASTBlockStatement* body;
 } ASTFunctionExpression;
 
 typedef struct {
-        ASTExpressionType type;
+        ASTNodeType type;
         ASTExpression* function;
         List* arguments;
 } ASTCallExpression;
 
 typedef struct {
-        ASTExpressionType type;
+        ASTNodeType type;
         ASTExpression* left;
         ASTExpression* index;
 } ASTIndexExpression;

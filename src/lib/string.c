@@ -10,6 +10,7 @@ string_new(const char* text)
 {
         HeapString * str = malloc(sizeof *str);
         str->pointer = malloc(4 * sizeof(char));
+        strcat(str->pointer, text);
         str->allocated_length = 4;
 
         return str;

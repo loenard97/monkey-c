@@ -2,3 +2,6 @@
 *.txt
 main
 test*
+vgcore*
+valgrind.log*
+vgcore*
